@@ -784,7 +784,7 @@ st.pyplot(fig)
 
 
 # Load trained model
-model = joblib.load("model.pkl")
+model = joblib.load("model.pk1")
 
 st.set_page_config(
     page_title="Customer Churn Prediction",
