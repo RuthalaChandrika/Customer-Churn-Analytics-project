@@ -783,8 +783,8 @@ ax.set_title("Correlation Heatmap")
 st.pyplot(fig)
 
 
-# Load trained model
-model = joblib.load("model.pk1")
+# Load model
+model = joblib.load("model.pkl")
 
 st.set_page_config(
     page_title="Customer Churn Prediction",
@@ -793,26 +793,117 @@ st.set_page_config(
 )
 
 st.title("📊 Customer Churn Prediction")
+st.write("Enter customer details to predict churn.")
 
-st.write("Enter customer details")
+# -------------------------
+# Input Fields
+# -------------------------
 
-# -------- Input Fields --------
 gender = st.selectbox("Gender", ["Male", "Female"])
-senior = st.selectbox("Senior Citizen", [0, 1])
-partner = st.selectbox("Partner", ["Yes", "No"])
-dependents = st.selectbox("Dependents", ["Yes", "No"])
-tenure = st.number_input("Tenure", min_value=0)
-monthly = st.number_input("Monthly Charges", min_value=0.0)
-total = st.number_input("Total Charges", min_value=0.0)
+
+age = st.number_input(
+    "Age",
+    min_value=18,
+    max_value=100,
+    value=30
+)
+
+senior = st.selectbox(
+    "Senior Citizen",
+    ["Yes", "No"]
+)
+
+married = st.selectbox(
+    "Married",
+    ["Yes", "No"]
+)
+
+dependents = st.selectbox(
+    "Dependents",
+    ["Yes", "No"]
+)
+
+tenure = st.number_input(
+    "Tenure in Months",
+    min_value=0,
+    max_value=100,
+    value=12
+)
+
+offer = st.selectbox(
+    "Offer",
+    [
+        "None",
+        "Offer A",
+        "Offer B",
+        "Offer C",
+        "Offer D",
+        "Offer E"
+    ]
+)
+
+phone = st.selectbox(
+    "Phone Service",
+    ["Yes", "No"]
+)
+
+internet_service = st.selectbox(
+    "Internet Service",
+    ["Yes", "No"]
+)
+
+internet_type = st.selectbox(
+    "Internet Type",
+    [
+        "DSL",
+        "Fiber Optic",
+        "Cable",
+        "None"
+    ]
+)
+
+online_security = st.selectbox(
+    "Online Security",
+    ["Yes", "No"]
+)
+
+online_backup = st.selectbox(
+    "Online Backup",
+    ["Yes", "No"]
+)
+
+device = st.selectbox(
+    "Device Protection Plan",
+    ["Yes", "No"]
+)
+
+tech = st.selectbox(
+    "Premium Tech Support",
+    ["Yes", "No"]
+)
+
+tv = st.selectbox(
+    "Streaming TV",
+    ["Yes", "No"]
+)
+
+movies = st.selectbox(
+    "Streaming Movies",
+    ["Yes", "No"]
+)
 
 contract = st.selectbox(
     "Contract",
-    ["Month-to-month", "One year", "Two year"]
+    [
+        "Month-to-month",
+        "One year",
+        "Two year"
+    ]
 )
 
-internet = st.selectbox(
-    "Internet Service",
-    ["DSL", "Fiber optic", "No"]
+paperless = st.selectbox(
+    "Paperless Billing",
+    ["Yes", "No"]
 )
 
 payment = st.selectbox(
@@ -825,39 +916,63 @@ payment = st.selectbox(
     ]
 )
 
-paperless = st.selectbox(
-    "Paperless Billing",
-    ["Yes", "No"]
+monthly = st.number_input(
+    "Monthly Charge",
+    min_value=0.0,
+    value=70.0
 )
 
-# ---------------- Prediction ----------------
+# -------------------------
+# Prediction
+# -------------------------
 
-if st.button("Predict"):
+if st.button("Predict Churn"):
 
-    data = pd.DataFrame({
-        "gender":[gender],
+    input_df = pd.DataFrame({
+
+        "Gender":[gender],
+        "Age":[age],
         "Senior Citizen":[senior],
-        "Partner":[partner],
+        "Married":[married],
         "Dependents":[dependents],
-        "tenure":[tenure],
-        "Monthly Charges":[monthly],
-        "Total Charges":[total],
+        "Tenure in Months":[tenure],
+        "Offer":[offer],
+        "Phone Service":[phone],
+        "Internet Service":[internet_service],
+        "Internet Type":[internet_type],
+        "Online Security":[online_security],
+        "Online Backup":[online_backup],
+        "Device Protection Plan":[device],
+        "Premium Tech Support":[tech],
+        "Streaming TV":[tv],
+        "Streaming Movies":[movies],
         "Contract":[contract],
-        "Internet Service":[internet],
+        "Paperless Billing":[paperless],
         "Payment Method":[payment],
-        "Paperless Billing":[paperless]
+        "Monthly Charge":[monthly]
+
     })
 
-    prediction = model.predict(data)[0]
-    probability = model.predict_proba(data)[0][1]
+    prediction = model.predict(input_df)[0]
+    probability = model.predict_proba(input_df)[0][1]
 
     st.subheader("Prediction Result")
 
     if prediction == 1:
-        st.error("Customer is likely to churn.")
+        st.error("⚠️ Customer is likely to churn")
     else:
-        st.success("Customer is likely to stay.")
+        st.success("✅ Customer is likely to stay")
 
-    st.metric("Churn Probability", f"{probability*100:.2f}%")
+    st.metric(
+        "Churn Probability",
+        f"{probability*100:.2f}%"
+    )
 
+    if probability >= 0.80:
+        st.error("High Risk Customer")
 
+    elif probability >= 0.50:
+        st.warning("Medium Risk Customer")
+
+    else:
+        st.success("Low Risk Customer")
