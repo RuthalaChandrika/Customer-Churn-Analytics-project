@@ -810,17 +810,17 @@ age = st.number_input(
 
 senior = st.selectbox(
     "Senior Citizen",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 married = st.selectbox(
     "Married",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 dependents = st.selectbox(
     "Dependents",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 tenure = st.number_input(
@@ -844,12 +844,12 @@ offer = st.selectbox(
 
 phone = st.selectbox(
     "Phone Service",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 internet_service = st.selectbox(
     "Internet Service",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 internet_type = st.selectbox(
@@ -864,32 +864,32 @@ internet_type = st.selectbox(
 
 online_security = st.selectbox(
     "Online Security",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 online_backup = st.selectbox(
     "Online Backup",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 device = st.selectbox(
     "Device Protection Plan",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 tech = st.selectbox(
     "Premium Tech Support",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 tv = st.selectbox(
     "Streaming TV",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 movies = st.selectbox(
     "Streaming Movies",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 contract = st.selectbox(
@@ -903,7 +903,7 @@ contract = st.selectbox(
 
 paperless = st.selectbox(
     "Paperless Billing",
-    ["Yes", "No"]
+    [0, 1]
 )
 
 payment = st.selectbox(
