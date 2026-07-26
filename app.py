@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import joblib
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -782,5 +782,82 @@ sns.heatmap(
 ax.set_title("Correlation Heatmap")
 st.pyplot(fig)
 
+
+# Load trained model
+model = joblib.load("model.pkl")
+
+st.set_page_config(
+    page_title="Customer Churn Prediction",
+    page_icon="📊",
+    layout="wide"
+)
+
+st.title("📊 Customer Churn Prediction")
+
+st.write("Enter customer details")
+
+# -------- Input Fields --------
+gender = st.selectbox("Gender", ["Male", "Female"])
+senior = st.selectbox("Senior Citizen", [0, 1])
+partner = st.selectbox("Partner", ["Yes", "No"])
+dependents = st.selectbox("Dependents", ["Yes", "No"])
+tenure = st.number_input("Tenure", min_value=0)
+monthly = st.number_input("Monthly Charges", min_value=0.0)
+total = st.number_input("Total Charges", min_value=0.0)
+
+contract = st.selectbox(
+    "Contract",
+    ["Month-to-month", "One year", "Two year"]
+)
+
+internet = st.selectbox(
+    "Internet Service",
+    ["DSL", "Fiber optic", "No"]
+)
+
+payment = st.selectbox(
+    "Payment Method",
+    [
+        "Electronic check",
+        "Mailed check",
+        "Bank transfer (automatic)",
+        "Credit card (automatic)"
+    ]
+)
+
+paperless = st.selectbox(
+    "Paperless Billing",
+    ["Yes", "No"]
+)
+
+# ---------------- Prediction ----------------
+
+if st.button("Predict"):
+
+    data = pd.DataFrame({
+        "gender":[gender],
+        "Senior Citizen":[senior],
+        "Partner":[partner],
+        "Dependents":[dependents],
+        "tenure":[tenure],
+        "Monthly Charges":[monthly],
+        "Total Charges":[total],
+        "Contract":[contract],
+        "Internet Service":[internet],
+        "Payment Method":[payment],
+        "Paperless Billing":[paperless]
+    })
+
+    prediction = model.predict(data)[0]
+    probability = model.predict_proba(data)[0][1]
+
+    st.subheader("Prediction Result")
+
+    if prediction == 1:
+        st.error("Customer is likely to churn.")
+    else:
+        st.success("Customer is likely to stay.")
+
+    st.metric("Churn Probability", f"{probability*100:.2f}%")
 
 
